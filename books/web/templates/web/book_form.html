@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+Добавить новую книгу
+{% endblock title %}
+
+{% block body %}
+<h3>Добавить новую книгу</h3>
+<form method="POST">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div class="mb-3">
+    <label class="form-label">{{ field.label }}</label>
+    {{ field }}
+    </div>
+
+    {% endfor %}
+
+    <button type="submit"> Добавить книгу </button> 
+</form>
+
+{% endblock body %} 

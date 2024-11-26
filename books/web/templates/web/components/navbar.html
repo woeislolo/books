@@ -1,0 +1,67 @@
+{% comment %} <nav>
+    <ul>
+        <li><a href="{% url 'web:book_list' %}">На главную</a></li>
+        <li><a href="{% url 'web:book_form' %}">Добавить книгу</a></li>
+        <li><a href='#'>About</a></li>
+        <li><a href="{% url 'web:login' %}">Войти</a></li>
+        <li><a href="{% url 'web:register' %}">Зарегистрироваться</a></li>
+    </ul>
+</nav> {% endcomment %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      {% comment %} <a class="navbar-brand" href="{% url 'web:book_list' %}">Книги</a> {% endcomment %}
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'web:book_list' %}">На главную</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'web:book_form' %}">Добавить книгу</a>
+        </li>
+        <li class="nav-item">
+            <form class="d-flex" role="search" action="{% url 'web:search' %}" method="get">
+                {% csrf_token %}
+                <input name="q" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit"><i class="icon icon-search"></i>Поиск</button>
+            </form>
+        </li>
+
+
+    {% comment %} <form action="{% url 'search' %}" method="get">
+<!--					{# csrf_token #}-->
+    <input name="q" type="text" placeholder="Поиск">
+    <button type="submit">
+        <i class="icon icon-search"></i>
+        <span class="visuallyhidden">Search</span>
+    </button>
+    </form> {% endcomment %}
+
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'web:profile' %}">{{ user.username }} | </a>
+        </li>
+        <li class="nav-item">
+          <form method="POST" action="{% url 'web:logout' %}">
+            {% csrf_token %}
+          <button type="submit">Выйти</button> 
+          </form>
+        </li>
+
+        {% else %}
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'web:login' %}">Войти</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'web:register' %}">Зарегистрироваться</a>
+            </li>
+        {% endif %}
+        </ul>
+    </div>
+  </div>
+</nav>

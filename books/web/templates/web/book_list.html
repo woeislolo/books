@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+
+  {% comment %} {% for book in books %}
+    <ul> 
+    <a href="{% url 'web:book_detail' pk=book.pk %}">{{ book }}</a>
+    </ul>
+
+  {% endfor %} {% endcomment %}
+
+  <ul class="list-group">
+    {% for book in books %}
+        <li class="list-group-item">
+            <div class="clear"></div>
+            <a href="{% url 'web:book_detail' pk=book.pk %}">{{book}}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock body %}

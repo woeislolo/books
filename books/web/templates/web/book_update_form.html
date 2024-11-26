@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Изменить книгу {{ book }}
+{% endblock title %}
+
+{% block body %}
+<h3>Изменить книгу {{ book }}</h3>
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_p }} 
+
+    <button type="submit"> Сохранить изменения </button> 
+</form>
+
+<div> 
+<a href="{% url 'web:book_detail' pk=book.pk %}"> Назад к книге </a>
+</div>
+
+{% endblock body %} 
