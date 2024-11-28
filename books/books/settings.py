@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from django.urls import reverse_lazy
 
 from dotenv import dotenv_values
+
 
 config = dotenv_values()
 
@@ -29,10 +31,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config["project_secret_key"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
 
-# ALLOWED_HOSTS = ['*']
+# DEBUG = True
+
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -123,8 +126,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'web.Reader'
 
-# LOGIN_REDIRECT_URL = reverse_lazy('web:profile')
-# LOGOUT_REDIRECT_URL = reverse_lazy('web:book_list')
+LOGIN_URL = reverse_lazy('web:login')
+LOGIN_REDIRECT_URL = reverse_lazy('web:profile')
+LOGOUT_REDIRECT_URL = reverse_lazy('web:book_list')
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -180,3 +184,46 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
 }
+
+
+EMAIL_HOST = config['email_host']
+EMAIL_PORT = config['email_port']
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = config['email_host_user']
+EMAIL_HOST_PASSWORD = config['email_host_password']
+DEFAULT_FROM_EMAIL = config['email_default_from_email']
+
+
+CACHES = {
+    'default': {
+        # 'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
+}
+
+
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+# CELERY_RESULT_BACKEND = 'django-db'
+
+# CELERY_CACHE_BACKEND = 'default'
+
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# установить celery
+
+# SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+# CSRF_TRUSTED_ORIGINS = []
+# if scrf_subdomain := os.getenv('SCRF_SUBDOMAIN'):
+#     CSRF_TRUSTED_ORIGINS += [f'http://{scrf_subdomain}', f'https://{scrf_subdomain}']
+
+
+BOOKS_APP_USER_CONFIRMATION_KEY = 'user_confirmation_{token}'
+BOOKS_APP_USER_CONFIRMATION_TIMEOUT = 300
+
+BOOKS_APP_USER_RESET_PASSWORD_KEY = 'user_reset_password_{token}'
+BOOKS_APP_USER_RESET_PASSWORD_TIMEOUT = 300

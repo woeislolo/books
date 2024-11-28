@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm
 
 from .models import *
 
@@ -16,11 +16,10 @@ class LoginUserForm(forms.ModelForm):
         fields = ['username', 'password']
 
 
-class RegisterForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = Reader
-        fields = UserCreationForm.Meta.fields + ('email',)
+class RegisterForm(forms.Form):
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control;'}))
+
 
 
 class ResetPasswordForm(PasswordResetForm):
-    pass
+    ...

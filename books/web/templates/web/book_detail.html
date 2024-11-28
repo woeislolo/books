@@ -5,11 +5,11 @@
 {{ book }}
 
 <div> 
-<a href="{% url 'web:book_update_form' pk=book.pk %}"> Изменить книгу </a>
+<a href="{% url 'web:book_update_form' pk=book.pk %}">Изменить книгу</a>
 </div>
 
 <div> 
-<a href="{% url 'web:book_confirm_delete' pk=book.pk %}"> Удалить книгу </a>
+<a href="{% url 'web:book_confirm_delete' pk=book.pk %}">Удалить книгу</a>
 </div>
 
 {% endblock body %} 
