@@ -21,9 +21,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'web:book_list' %}">На главную</a>
         </li>
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'web:book_form' %}">Добавить книгу</a>
         </li>
+        {% endif %}
         <li class="nav-item">
             <form class="d-flex" role="search" action="{% url 'web:search' %}" method="get">
                 {% csrf_token %}

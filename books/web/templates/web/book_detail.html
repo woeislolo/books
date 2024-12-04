@@ -13,6 +13,7 @@
 <p>Прочитали: {{ book.readers.all|join:", " }}</p>
 {% endif %}
 
+{% if request.user.is_authenticated %}
 <div> 
 <a href="{% url 'web:book_update_form' pk=book.pk %}">Изменить книгу</a>
 </div>
@@ -20,5 +21,6 @@
 <div> 
 <a href="{% url 'web:book_confirm_delete' pk=book.pk %}">Удалить книгу</a>
 </div>
+{% endif %}
 
 {% endblock body %} 

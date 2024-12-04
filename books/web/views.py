@@ -3,6 +3,7 @@ import string
 import uuid
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetDoneView, \
     PasswordChangeView, PasswordChangeDoneView, LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -32,20 +33,23 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
 
-class BookCreateView(SuccessMessageMixin, CreateView):
+class BookCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    login_url = LOGIN_URL
     model = Book
     form_class = BookForm
     success_message = "Книга %(title)s, %(author)s успешно добавлена."
 
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = LOGIN_URL
     model = Book
     form_class = BookForm
     template_name_suffix = '_update_form'
     context_object_name = 'book'
 
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = LOGIN_URL
     model = Book
     success_url = reverse_lazy("web:book_list")
 
