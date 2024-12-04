@@ -57,7 +57,7 @@ class BookDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("web:book_list")
 
 
-class SearchResult(ListView):
+class SearchResultView(ListView):
     model = Book
     template_name = 'web/search.html'
     context_object_name = 'books'
@@ -70,6 +70,13 @@ class SearchResult(ListView):
             Q(title__contains=self.query) | Q(author__contains=self.query))
         self.result_num = len(searched_books)
         return searched_books
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Результаты поиска'
+        context['result_num'] = self.result_num
+        context['query'] = self.query
+        return context
 
 
 @login_required

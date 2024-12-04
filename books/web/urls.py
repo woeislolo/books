@@ -11,7 +11,7 @@ urlpatterns = [
     path(route='books/<int:pk>/', view=views.BookDetailView.as_view(), name='book_detail'),
     path(route='books/add/', view=views.BookCreateView.as_view(), name='book_form'),
     path(route='books/', view=views.BookListView.as_view(), name='book_list'),
-    path(route='search/', view=views.SearchResult.as_view(), name='search'),
+    path(route='search/', view=views.SearchResultView.as_view(), name='search'),
     path(route='profile/', view=views.profile_view, name='profile'),
     path(route='login/', view=views.WebLoginView.as_view(), name='login'),
     path(route='logout/', view=views.WebLogoutView.as_view(), name='logout'),
