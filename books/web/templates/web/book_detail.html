@@ -14,13 +14,19 @@
 {% endif %}
 
 {% if request.user.is_authenticated %}
+
+{% if perms.web.change_book %}
 <div> 
 <a href="{% url 'web:book_update_form' pk=book.pk %}">Изменить книгу</a>
 </div>
+{% endif %}
 
+{% if perms.web.delete_book %}
 <div> 
 <a href="{% url 'web:book_confirm_delete' pk=book.pk %}">Удалить книгу</a>
 </div>
+{% endif %}
+
 {% endif %}
 
 {% endblock body %} 

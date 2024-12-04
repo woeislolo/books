@@ -3,7 +3,7 @@ import string
 import uuid
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetDoneView, \
     PasswordChangeView, PasswordChangeDoneView, LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
+from django.http import Http404
 
 from .models import *
 from .forms import *
@@ -20,7 +21,7 @@ from books.settings import *
 
 
 def page_404(request):
-    return render(request=request, template_name='web/error404.html') 
+    raise Http404()
 
 
 class BookListView(ListView):
@@ -40,7 +41,8 @@ class BookCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "Книга %(title)s, %(author)s успешно добавлена."
 
 
-class BookUpdateView(LoginRequiredMixin, UpdateView):
+class BookUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = 'web.change_book'
     login_url = LOGIN_URL
     model = Book
     form_class = BookForm
@@ -48,7 +50,8 @@ class BookUpdateView(LoginRequiredMixin, UpdateView):
     context_object_name = 'book'
 
 
-class BookDeleteView(LoginRequiredMixin, DeleteView):
+class BookDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+    permission_required = 'web.delete_book'
     login_url = LOGIN_URL
     model = Book
     success_url = reverse_lazy("web:book_list")
