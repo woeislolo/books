@@ -5,6 +5,7 @@ import uuid
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetDoneView, \
     PasswordChangeView, PasswordChangeDoneView, LoginView, LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
@@ -27,13 +28,14 @@ class BookListView(ListView):
 
 
 class BookDetailView(DetailView):
-    model = Book
+    queryset = Book.objects.prefetch_related('readers')
     context_object_name = 'book'
 
 
-class BookCreateView(CreateView):
+class BookCreateView(SuccessMessageMixin, CreateView):
     model = Book
     form_class = BookForm
+    success_message = "Книга %(title)s, %(author)s успешно добавлена."
 
 
 class BookUpdateView(UpdateView):
@@ -87,20 +89,22 @@ class ChangePasswordDoneView(PasswordChangeDoneView):
     ...
 
 
-class RegisterView(FormView):
+class RegisterView(SuccessMessageMixin, FormView):
     form_class = RegisterForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy("web:book_list")
+    success_message = "Ссылка для активации аккаунта отправлена на %(email)s."
 
     def form_valid(self, form):
-        reader, created = Reader.objects.get_or_create(email=form.cleaned_data['email'])   
+        reader, created = Reader.objects.get_or_create(email=form.cleaned_data['email']) 
         new_pass = None
 
         if created or reader.is_active is False:
             alphabet = string.ascii_letters + string.digits
             new_pass = ''.join(secrets.choice(alphabet) for i in range(8))
             reader.set_password(new_pass)
-            reader.save(update_fields=['password',])
+            reader.username = form.cleaned_data['username']
+            reader.save(update_fields=['password', 'username'])
 
             token = uuid.uuid4().hex
             redis_key = BOOKS_APP_USER_CONFIRMATION_KEY.format(token=token)
@@ -120,8 +124,6 @@ class RegisterView(FormView):
                 recipient_list=[reader.email,],
             )
 
-            # TODO: добавить какое-то уведомление - "вам на почту было направлено письмо"
-
         return super().form_valid(form)
 
 
@@ -138,10 +140,11 @@ def register_confirm(request, token):
         return redirect(reverse_lazy('web:register'))
 
 
-class ResetPasswordView(FormView):
+class ResetPasswordView(SuccessMessageMixin, FormView):
     form_class = ResetPasswordForm
     template_name = 'registration/password_reset.html'
     success_url = reverse_lazy("web:password_reset_done")
+    success_message = "Ссылка для сброса пароля отправлена на почту %(email)s."
 
     def form_valid(self, form):
         reader = get_object_or_404(Reader, email=form.cleaned_data['email'])
@@ -172,7 +175,6 @@ class ResetPasswordView(FormView):
                 recipient_list=[reader.email,],
             )
 
-            # TODO: добавить какое-то уведомление - "вам на почту было направлено письмо"
             # TODO: вынести генерацию пароля и токена (дублируется в 2х функциях)
 
             return super().form_valid(form)

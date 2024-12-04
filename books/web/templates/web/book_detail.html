@@ -2,7 +2,16 @@
 
 {% block body %}
 
-{{ book }}
+<p>Название: {{ book.title }}</p>
+<p>Автор: {{ book.author }}</p>
+
+{% if book.about %}
+<p>О книге: {{ book.about }}</p>
+{% endif %}
+
+{% if book.readers.all %}
+<p>Прочитали: {{ book.readers.all|join:", " }}</p>
+{% endif %}
 
 <div> 
 <a href="{% url 'web:book_update_form' pk=book.pk %}">Изменить книгу</a>

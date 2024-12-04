@@ -17,6 +17,7 @@ class LoginUserForm(forms.ModelForm):
 
 
 class RegisterForm(forms.Form):
+    username = forms.CharField(required=True)
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control;'}))
 
 

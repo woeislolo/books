@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Reader(AbstractUser):
-
     username = models.CharField(
         _("username"),
         max_length=150,
@@ -13,11 +12,11 @@ class Reader(AbstractUser):
             "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
         ),
         validators=[AbstractUser.username_validator],
-        error_messages={
-            "unique": _("A user with that username already exists."),
-        },
-        null=True,
-        blank=True,
+        # error_messages={
+        #     "unique": _("A user with that username already exists."),
+        # },
+        null=False,
+        blank=False,
     )
 
     email = models.EmailField(_("email address"), unique=True)
@@ -35,7 +34,7 @@ class Reader(AbstractUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f'{self.email}'
+        return f'{self.username}'
 
 
 class Book(models.Model):
