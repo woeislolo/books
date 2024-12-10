@@ -5,20 +5,19 @@
 {% endblock title %}
 
 {% block body %}
+
 <h3>Удалить книгу {{ book }}</h3>
 
 <p>Вы уверены, что хотите удалить книгу {{ book }}?</p>
 
 <form method="POST">
-    {% csrf_token %}
-    
-    
-    {{ form }}
-    <input type="submit" value="Удалить">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Удалить">
 </form>
 
 <div> 
-<a href="{% url 'web:book_detail' pk=book.pk %}">Назад к книге</a>
+  <a href="{% url 'web:book_detail' pk=book.pk %}">Назад к книге</a>
 </div>
 
 {% endblock body %} 

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+{{ book }}
+{% endblock title %}
+
 {% block body %}
 
 <p>Название: {{ book.title }}</p>
@@ -9,23 +13,27 @@
 <p>О книге: {{ book.about }}</p>
 {% endif %}
 
+{% if book.added_by %}
+<p>Добавлена: {{ book.added_by }}</p>
+{% endif %}
+
 {% if book.readers.all %}
 <p>Прочитали: {{ book.readers.all|join:", " }}</p>
 {% endif %}
 
 {% if request.user.is_authenticated %}
 
-{% if perms.web.change_book %}
-<div> 
-<a href="{% url 'web:book_update_form' pk=book.pk %}">Изменить книгу</a>
-</div>
-{% endif %}
+  {% if perms.web.change_book %}
+  <div> 
+    <a href="{% url 'web:book_update_form' pk=book.pk %}">Изменить книгу</a>
+  </div>
+  {% endif %}
 
-{% if perms.web.delete_book %}
-<div> 
-<a href="{% url 'web:book_confirm_delete' pk=book.pk %}">Удалить книгу</a>
-</div>
-{% endif %}
+  {% if perms.web.delete_book %}
+  <div> 
+    <a href="{% url 'web:book_confirm_delete' pk=book.pk %}">Удалить книгу</a>
+  </div>
+  {% endif %}
 
 {% endif %}
 

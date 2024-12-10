@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+Поиск
+{% endblock title %}
+
 {% block body %}
 
 <h3>{{ title }}</h3>
@@ -10,12 +14,12 @@
 {% endif %}
 
 <ul class="list-group">
-    {% for book in books %}
-        <li class="list-group-item">
-            <div class="clear"></div>
-            <a href="{% url 'web:book_detail' pk=book.pk %}">{{book}}</a>
-        </li>
-    {% endfor %}
+{% for book in books %}
+  <li class="list-group-item">
+    <div class="clear"></div>
+    <a href="{% url 'web:book_detail' pk=book.pk %}">{{book}}</a>
+  </li>
+{% endfor %}
 </ul>
 
 {% endblock %}

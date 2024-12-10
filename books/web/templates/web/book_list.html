@@ -3,11 +3,12 @@
 {% block body %}
 
 <ul class="list-group">
-    {% for book in books %}
-        <li class="list-group-item">
-            <div class="clear"></div>
-            <a href="{% url 'web:book_detail' pk=book.pk %}">{{book}}</a>
-        </li>
-    {% endfor %}
+{% for book in books %}
+  <li class="list-group-item">
+    <div class="clear"></div>
+    <a href="{% url 'web:book_detail' pk=book.pk %}">{{ book }}</a>
+  </li>
+{% endfor %}
 </ul>
+
 {% endblock body %}

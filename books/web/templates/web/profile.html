@@ -15,13 +15,13 @@
 {% endif %}
 
 <form method="POST" action="{% url 'web:logout' %}">
-    {% csrf_token %}
-    <button type="submit">Выйти из аккаунта</button> 
+  {% csrf_token %}
+  <button type="submit">Выйти из аккаунта</button> 
 </form>
 
 <form method="POST" action="{% url 'web:password_change' %}">
-    {% csrf_token %}
-    <button type="submit">Сменить пароль</button> 
+  {% csrf_token %}
+   <button type="submit">Сменить пароль</button> 
 </form>
 
 {% endblock body %} 
