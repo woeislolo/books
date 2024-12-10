@@ -31,6 +31,7 @@ class BookListView(ListView):
 
 class BookDetailView(DetailView):
     queryset = Book.objects.prefetch_related('readers')
+    # queryset = Book.objects.select_related('added_by').prefetch_related('readers')
     context_object_name = 'book'
 
 

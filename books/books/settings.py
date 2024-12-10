@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 
 from django.urls import reverse_lazy
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'djoser',
 
     'django_filters',
+    'django_extensions',
 
     'web.apps.WebConfig',
     'api.apps.ApiConfig',
@@ -227,3 +229,20 @@ BOOKS_APP_USER_CONFIRMATION_TIMEOUT = 300
 
 BOOKS_APP_USER_RESET_PASSWORD_KEY = 'user_reset_password_{token}'
 BOOKS_APP_USER_RESET_PASSWORD_TIMEOUT = 300
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+TESTING = "test" in sys.argv
+
+if not TESTING:
+    INSTALLED_APPS = [
+        *INSTALLED_APPS,
+        "debug_toolbar",
+    ]
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        *MIDDLEWARE,
+    ]
+    
